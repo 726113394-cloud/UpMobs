@@ -1,0 +1,48 @@
+name: UpMobs
+version: '1.0.0'
+main: io.Sriptirc_wp_1258.upmobs.Upmobs
+api-version: '1.16'
+authors: ['wp:1258']
+description: '升级原版我的世界中的所有怪物，支持自定义生物和动态属性调节'
+depend: ['Vault']
+commands:
+    upmobs:
+        description: '主命令帮助菜单'
+        aliases: ['um']
+    upmobsreload:
+        description: '重载插件配置'
+        aliases: ['umr']
+    upmobsset:
+        description: '设置生物属性'
+        aliases: ['ums']
+    upmobsget:
+        description: '查看生物属性'
+        aliases: ['umg']
+    upmobspreset:
+        description: '管理预设配置'
+        aliases: ['ump']
+    upmobscustom:
+        description: '管理自定义生物'
+        aliases: ['umc']
+    challengetower:
+        description: '挑战塔快捷命令'
+        aliases: ['ct']
+permissions:
+    upmobs.use:
+        description: '使用插件基础功能'
+        default: false
+    upmobs.admin:
+        description: '管理员权限'
+        default: false
+    upmobs.set:
+        description: '设置生物属性'
+        default: false
+    upmobs.get:
+        description: '查看生物属性'
+        default: false
+    upmobs.preset:
+        description: '管理预设配置'
+        default: false
+    upmobs.custom:
+        description: '管理自定义生物'
+        default: false

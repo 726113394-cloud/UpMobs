@@ -1,0 +1,453 @@
+# 升格怪物Up!Mobs 配置文件 - 吸血进化版 + 自然刷新升格 + 第四阶段怪物 + 经济奖励 + 挑战塔逐层加强 + 通天层 + 通关奖金（无天气系统）
+# ScriptIrc-config-version: 30
+
+# ============================================================
+# 全局设置 - 控制插件整体行为
+# ============================================================
+upgrade_enabled: true            # 【总开关】true=启用升格/进化，false=完全禁用
+random_individual_upgrade: false  # 【旧功能】随机个体升级（已废弃，建议保持false）
+global_multiplier: 1.5           # 【全局倍率】所有怪物属性在此基础上乘算（1.5=1.5倍）
+
+# ============================================================
+# 自然刷新升格 - 野外怪物生成时直接变成升格怪物
+# ============================================================
+natural_upgrade:
+  enabled: true                  # 启用自然刷新升格怪物
+  spawn_chance: 0.09             # 自然刷新升格怪物几率（百分比，0.09%）
+  upgrade_strength: 1.0          # 升格怪物增强幅度（1.0 = 无增强）
+  effects:
+    sound: true                  # 是否播放升格音效
+    particles: true              # 是否显示粒子特效
+    attack_effects: true         # 是否启用攻击特效
+    name_prefix: true            # 是否添加升格名称前缀
+
+# ============================================================
+# 吸血进化 - 怪物攻击玩家积累能量，满足条件后进化到下一阶段
+# ============================================================
+evolution:
+  enabled: true                  # 是否启用吸血进化
+  required_attacks: 5            # 进化所需攻击次数（增加到5次）
+  required_damage: 25.0          # 进化所需总伤害（增加到25点）
+  health_threshold: 50.0         # 血量阈值百分比（低于50%才进化）
+  cooldown: 45000                # 进化冷却时间（毫秒，45秒）
+  max_stages: 4                  # 最大进化阶段
+  duration: 60                   # 进化持续时间（tick，3秒）
+  
+  # 进化提示消息
+  start_message: "§c§l{怪物} §f吸食了你的血液，开始进化！"
+  complete_message: "§6§l{怪物} §e已完成第{阶段}阶段进化！"
+  
+  # 进化效果
+  particles: true                # 是否显示粒子效果
+  sounds: true                   # 是否播放音效
+  screen_shake: true             # 是否屏幕震动
+  glowing: true                  # 是否发光效果
+  
+  # 进化怪物装备
+  stage_equipment: true          # 是否给高阶段怪物添加随机护甲和武器（第二阶段起）
+
+# ============================================================
+# 原版生物属性 - 每种怪物的基础属性配置
+# ============================================================
+# 格式说明：
+#   health: 血量 (支持: 固定值100, 区间50-150, 百分比200%)
+#   speed: 速度 (基础值0.2)
+#   armor: 护甲
+#   damage: 伤害
+#   knockback_resistance: 击退抗性 (0-1)
+#   follow_range: 跟随范围
+#   attack_speed: 攻击速度
+#   fire_resistant: 火焰抗性
+#   invisible: 隐身
+#   glowing: 发光
+#   silent: 静音
+#   spawn_weight: 生成权重 (0-1, 用于随机个体升级)
+
+mobs:
+  # 僵尸类
+  zombie:
+    type: ZOMBIE
+    health: 200%      # 2倍血量（平衡调整）
+    speed: 110%       # 1.1倍速度（略微提升）
+    armor: 150%       # 1.5倍护甲
+    damage: 200%      # 2倍伤害
+    knockback_resistance: 20%  # 降低击退抗性
+    follow_range: 150%
+    attack_speed: 120%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 1.0
+  
+  skeleton:
+    type: SKELETON
+    health: 180%      # 1.8倍血量
+    speed: 105%       # 1.05倍速度
+    armor: 120%       # 1.2倍护甲
+    damage: 180%      # 1.8倍伤害
+    knockback_resistance: 10%  # 骷髅应该容易被击退
+    follow_range: 200%
+    attack_speed: 150%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 1.0
+  
+  creeper:
+    type: CREEPER
+    health: 200%
+    speed: 100%       # 保持原版速度
+    armor: 100%
+    damage: 100%      # 取消爆炸伤害增强，保持原版伤害
+    knockback_resistance: 0%    # 取消击退抗性
+    follow_range: 100%          # 保持原版跟随范围
+    attack_speed: 100%
+    fire_resistant: false
+    invisible: false
+    glowing: true     # 发光以便识别
+    silent: false
+    spawn_weight: 0.8  # 80%生成几率
+  
+  spider:
+    type: SPIDER
+    health: 400%
+    speed: 200%
+    armor: 250%
+    damage: 300%
+    knockback_resistance: 40%
+    follow_range: 180%
+    attack_speed: 200%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 1.0
+  
+  enderman:
+    type: ENDERMAN
+    health: 600%
+    speed: 180%
+    armor: 400%
+    damage: 500%
+    knockback_resistance: 70%
+    follow_range: 300%
+    attack_speed: 160%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 0.7
+  
+  # BOSS生物
+  wither:
+    type: WITHER
+    health: 800%
+    speed: 150%
+    armor: 600%
+    damage: 700%
+    knockback_resistance: 90%
+    follow_range: 400%
+    attack_speed: 200%
+    fire_resistant: true
+    invisible: false
+    glowing: true
+    silent: false
+    spawn_weight: 1.0
+  
+  ender_dragon:
+    type: ENDER_DRAGON
+    health: 1000%
+    speed: 180%
+    armor: 800%
+    damage: 800%
+    knockback_resistance: 95%
+    follow_range: 500%
+    attack_speed: 180%
+    fire_resistant: true
+    invisible: false
+    glowing: true
+    silent: false
+    spawn_weight: 1.0
+  
+  # 特殊生物
+  illusioner:
+    type: ILLUSIONER
+    health: 400%
+    speed: 130%
+    armor: 300%
+    damage: 350%
+    knockback_resistance: 60%
+    follow_range: 250%
+    attack_speed: 170%
+    fire_resistant: false
+    invisible: true    # 幻术师默认隐身
+    glowing: false
+    silent: false
+    spawn_weight: 0.5  # 幻术师稀有
+  
+  # 更多生物配置会在插件首次运行时自动生成...
+
+# ============================================================
+# 自定义生物 - 通过指令添加的特殊生物
+# ============================================================
+# 使用 /upmobs custom add <名称> 添加
+custom_mobs:
+  # 示例：精英僵尸
+  elite_zombie:
+    type: CUSTOM
+    name: elite_zombie
+    health: 1000%
+    speed: 200%
+    armor: 500%
+    damage: 600%
+    knockback_resistance: 80%
+    follow_range: 300%
+    attack_speed: 250%
+    fire_resistant: true
+    invisible: false
+    glowing: true
+    silent: false
+    spawn_weight: 0.3
+
+# ============================================================
+# 预设配置 - 保存/加载不同的难度配置方案
+# ============================================================
+# 使用 /upmobs preset save <名称> 保存当前配置
+# 使用 /upmobs preset load <名称> 加载预设配置
+presets:
+  easy_mode:
+    mobs:
+      zombie:
+        type: ZOMBIE
+        health: 150%
+        speed: 110%
+        armor: 120%
+        damage: 130%
+        knockback_resistance: 20%
+        follow_range: 120%
+        attack_speed: 110%
+        fire_resistant: false
+        invisible: false
+        glowing: false
+        silent: false
+        spawn_weight: 1.0
+  
+  nightmare_mode:
+    mobs:
+      zombie:
+        type: ZOMBIE
+        health: 1000%
+        speed: 300%
+        armor: 800%
+        damage: 900%
+        knockback_resistance: 90%
+        follow_range: 400%
+        attack_speed: 300%
+        fire_resistant: true
+        invisible: false
+        glowing: true
+        silent: false
+        spawn_weight: 1.0
+
+# ============================================================
+# 第四阶段怪物 - 终极进化形态的属性配置
+# ============================================================
+stage4:
+  spawn_chance: 8.0                  # 第四阶段怪物生成几率（百分比）
+  
+  # 属性增强倍率（相对于第三阶段）
+  health_multiplier: 4.0             # 血量倍率（4倍）
+  damage_multiplier: 3.0             # 伤害倍率（3倍）
+  speed_multiplier: 1.5              # 速度倍率（1.5倍）
+  armor_multiplier: 2.0              # 护甲倍率（2倍）
+  knockback_resistance: 0.8          # 击退抗性（80%）
+  attack_speed_multiplier: 1.5       # 攻击速度倍率（1.5倍）
+  
+  # 特效设置
+  effects:
+    glowing: true                    # 永久发光效果
+    strength: true                   # 力量效果（等级1）
+    resistance: true                 # 抗性提升效果（等级1）
+    speed: true                      # 速度效果（等级1）
+    regeneration: true               # 再生效果（等级0）
+    
+  # 粒子效果
+  particles:
+    type: DRAGON_BREATH              # 粒子类型
+    count: 20                        # 粒子数量
+    spread: 3.0                      # 粒子扩散范围
+    
+  # 音效
+  sound:
+    spawn: ENTITY_WITHER_SPAWN       # 生成音效
+    volume: 1.0                      # 音量
+    pitch: 0.8                       # 音调
+
+# ============================================================
+# 经济奖励 - 击杀升格/进化怪物获得游戏币（需Vault插件）
+# ============================================================
+economy_rewards:
+  enabled: true                      # 是否启用经济奖励
+  
+  # 基础奖励设置
+  base_amount: 10.0                  # 第一阶段基础奖励
+  stage_multiplier: 2.0              # 每阶段奖励倍率（第二阶段=20，第三阶段=40，第四阶段=80）
+  min_amount: 5.0                    # 最小奖励金额
+  
+  # 特殊怪物奖励
+  stage4_bonus: 50.0                 # 第四阶段怪物额外奖励
+  upgraded_amount: 15.0              # 升格怪物基础奖励
+  reward_chance: 0.3                 # 击杀升格怪物获得奖金的几率（0.3 = 30%）
+  
+  # 奖励消息
+  message_enabled: true              # 是否显示奖励消息
+  message_format: "§a§l+ §f{amount} 游戏币 §7({reason})"  # 奖励消息格式
+  
+  # 奖励限制
+  max_reward_per_kill: 200.0         # 单次击杀最大奖励
+  require_permission: false          # 是否需要权限才能获得奖励
+  permission_node: "upmobs.rewards"  # 奖励权限节点
+
+# ============================================================
+# 挑战塔 - 18层逐层加强的挑战模式
+# ============================================================
+challenge_tower:
+  # 基础配置
+  max_players: 4                     # 最大玩家数
+  max_levels: 18                     # 最大层数
+  waves_per_level: 3                 # 每层波次数
+  base_monster_count: 10             # 基础怪物数量
+  increment_per_level: 6             # 每层增加怪物数量
+  monster_per_player: 3              # 每多1人增加的怪物数量
+  
+  cooldown_seconds: 300              # 冷却时间（秒）
+  
+  # 队列倒计时配置
+  queue_countdown: 30                # 队列倒计时秒数（单人可开启）
+  min_players_to_start: 1            # 开始挑战所需最少玩家数
+  enable_countdown: true             # 是否启用倒计时
+  
+  # 奖励配置
+  base_experience: 100               # 基础经验奖励
+  experience_multiplier: 1.5         # 每层经验倍率
+  
+  # 通关奖金配置（首次通关每层时发放）
+  completion_rewards:
+    enabled: true                    # 启用通关奖金
+    base_reward: 8000.0              # 基础层奖金（1-5层）
+    advanced_reward: 9000.0          # 进阶层奖金（6-10层）
+    elite_reward: 10000.0            # 精英层奖金（11-15层）
+    master_reward: 11000.0           # 大师层奖金（16-18层）
+  
+  # 区域保护
+  teleport_delay_ticks: 50           # 传送延迟
+  enable_warning: true               # 启用警告
+  prevent_natural_spawn: true        # 阻止自然生成
+  
+  # 怪物类型
+  monster_types:
+    - ZOMBIE
+    - SKELETON
+    - CREEPER
+    - SPIDER
+    - ENDERMAN
+    - WITCH
+    - BLAZE
+    - PIGLIN
+    - HUSK
+    - STRAY
+  
+  # ========== 逐层加强配置 ==========
+  level_scaling:
+    # 基础属性增强
+    base_health_multiplier: 1.0      # 基础血量倍率
+    health_multiplier_per_level: 0.5 # 每层血量倍率增加
+    max_health_multiplier: 10.0      # 最大血量倍率
+    
+    base_damage_multiplier: 1.0      # 基础伤害倍率
+    damage_multiplier_per_level: 0.4 # 每层伤害倍率增加
+    max_damage_multiplier: 8.0       # 最大伤害倍率
+    
+    base_speed_multiplier: 1.0       # 基础速度倍率
+    speed_multiplier_per_level: 0.1  # 每层速度倍率增加
+    max_speed_multiplier: 3.0        # 最大速度倍率
+    
+    base_armor_multiplier: 1.0       # 基础护甲倍率
+    armor_multiplier_per_level: 0.2  # 每层护甲倍率增加
+    max_armor_multiplier: 5.0        # 最大护甲倍率
+    
+    # 特殊效果配置
+    min_level_for_effects: 5         # 开始出现特殊效果的最小层数
+    effect_chance_per_level: 0.03    # 每层特殊效果几率增加
+    max_effect_chance: 0.5           # 最大特殊效果几率
+    
+    # 进化系统配置
+    min_level_for_evolution: 6       # 开始出现进化怪物的最小层数（进阶层）
+    evolution_chance_per_level: 0.017 # 每层进化几率增加（达到30%）
+    max_evolution_chance: 0.3        # 最大进化几率
+    
+    # 第四阶段怪物配置
+    min_level_for_stage4: 11         # 开始出现第四阶段怪物的最小层数（精英层）
+    stage4_chance_per_level: 0.008   # 每层第四阶段怪物几率增加（达到15%）
+    max_stage4_chance: 0.15          # 最大第四阶段怪物几率
+    
+    # 升格怪物配置
+    upgraded_chance_per_level: 0.05  # 每层升格怪物几率增加
+    max_upgraded_chance: 0.8         # 最大升格怪物几率
+    
+    # 特殊效果类型
+    special_effects:
+      - FIRE_RESISTANCE              # 火焰抗性
+      - KNOCKBACK_RESISTANCE         # 击退抗性
+      - REGENERATION                 # 生命恢复
+      - STRENGTH                     # 力量效果
+
+# ============================================================
+# 通天层 - 通关挑战塔18层后解锁的无尽挑战模式
+# ============================================================
+sky_tower:
+  enabled: true                      # 是否启用通天层
+  unlock_requirement: complete_tower # 解锁要求：complete_tower=通关挑战塔
+  
+  # 怪物配置
+  monster:
+    base_count: 10                   # 基础怪物数量
+    refresh_on_death: true           # 死亡后刷新怪物
+    refresh_delay_seconds: 5         # 刷新延迟（秒）
+    types:                           # 怪物类型（第四阶段怪物）
+      - STAGE4_ZOMBIE
+      - STAGE4_SKELETON
+      - STAGE4_CREEPER
+      - STAGE4_SPIDER
+      - STAGE4_ENDERMAN
+  
+  # 时间限制
+  time_limit:
+    minutes: 10                      # 时间限制（分钟）
+    show_timer: true                 # 显示倒计时
+    warning_seconds: 60              # 警告时间（秒）
+  
+  # 难度配置
+  difficulty:
+    increase_per_minute: 0.1         # 每分钟难度增加
+    max_multiplier: 3.0              # 最大难度倍率
+  
+  # 奖励配置
+  rewards:
+    base_per_kill: 50.0              # 基础击杀奖励
+    multiplier_per_minute: 1.2       # 每分钟奖励倍率
+    milestone_interval_minutes: 5    # 里程碑间隔（分钟）
+    milestone_bonus: 100.0           # 里程碑额外奖励
+  
+  # 排行榜配置
+  leaderboard:
+    enabled: true                    # 启用排行榜
+    size: 10                         # 排行榜大小
+    save_stats: true                 # 保存玩家统计
+  
+  # 特殊效果
+  effects:
+    player_status_display: true      # 启用玩家状态显示
+    status_update_seconds: 10        # 状态更新间隔
