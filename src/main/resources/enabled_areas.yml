@@ -1,0 +1,10 @@
+# 启用的游戏区域列表
+# 管理员使用 /gostadmin load <区域名称> enable 来启用区域
+# 使用 /gostadmin load <区域名称> disable 来禁用区域
+# 启用的区域会在游戏开始时随机选择
+
+enabled_areas:
+  # 示例：启用区域
+  # - area1
+  # - area2
+  # - area3

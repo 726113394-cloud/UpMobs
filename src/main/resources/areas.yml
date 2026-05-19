@@ -1,0 +1,33 @@
+# Gost 游戏区域存档文件
+# 此文件由插件自动管理，请勿手动编辑
+
+# 区域数据格式：
+# areas:
+#   区域名称:
+#     name: 区域名称
+#     world: 世界名称
+#     pos1_x: X坐标
+#     pos1_y: Y坐标
+#     pos1_z: Z坐标
+#     pos2_x: X坐标
+#     pos2_y: Y坐标
+#     pos2_z: Z坐标
+#     created: 创建时间戳
+#     last_used: 最后使用时间戳
+#     usage_count: 使用次数
+
+areas: {}
+# 示例区域（取消注释并修改坐标即可使用）：
+#  areas:
+#    测试区域:
+#      name: 测试区域
+#      world: world
+#      pos1_x: 100.0
+#      pos1_y: 64.0
+#      pos1_z: 100.0
+#      pos2_x: 120.0
+#      pos2_y: 80.0
+#      pos2_z: 120.0
+#      created: 1700000000000
+#      last_used: 1700000000000
+#      usage_count: 0
