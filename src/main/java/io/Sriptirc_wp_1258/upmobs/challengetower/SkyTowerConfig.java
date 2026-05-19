@@ -31,6 +31,12 @@ public class SkyTowerConfig {
     private double difficultyIncreasePerMinute = 0.1;   // 每分钟难度增加
     private double maxDifficultyMultiplier = 3.0;       // 最大难度倍率
     
+    // 阶段递进配置（分钟）
+    private int stage1StartMinute = 0;                  // 第一阶段开始（普通升格怪物）
+    private int stage2StartMinute = 2;                  // 第二阶段开始（进化怪物）
+    private int stage3StartMinute = 5;                  // 第三阶段开始（高阶段进化怪物）
+    private int stage4StartMinute = 8;                  // 第四阶段开始（第四阶段怪物）
+    
     // 奖励配置
     private double baseRewardPerKill = 50.0;            // 基础击杀奖励
     private double rewardMultiplierPerMinute = 1.2;     // 每分钟奖励倍率
@@ -96,6 +102,12 @@ public class SkyTowerConfig {
         // 难度配置
         difficultyIncreasePerMinute = config.getDouble("difficulty.increase_per_minute", difficultyIncreasePerMinute);
         maxDifficultyMultiplier = config.getDouble("difficulty.max_multiplier", maxDifficultyMultiplier);
+        
+        // 阶段递进配置
+        stage1StartMinute = config.getInt("stages.stage1_start_minute", stage1StartMinute);
+        stage2StartMinute = config.getInt("stages.stage2_start_minute", stage2StartMinute);
+        stage3StartMinute = config.getInt("stages.stage3_start_minute", stage3StartMinute);
+        stage4StartMinute = config.getInt("stages.stage4_start_minute", stage4StartMinute);
         
         // 奖励配置
         baseRewardPerKill = config.getDouble("rewards.base_per_kill", baseRewardPerKill);
@@ -239,6 +251,34 @@ public class SkyTowerConfig {
     
     public void setMaxDifficultyMultiplier(double maxDifficultyMultiplier) {
         this.maxDifficultyMultiplier = maxDifficultyMultiplier;
+    }
+    
+    // ========== 阶段递配置 Getter ==========
+    
+    public int getStage1StartMinute() {
+        return stage1StartMinute;
+    }
+    
+    public int getStage2StartMinute() {
+        return stage2StartMinute;
+    }
+    
+    public int getStage3StartMinute() {
+        return stage3StartMinute;
+    }
+    
+    public int getStage4StartMinute() {
+        return stage4StartMinute;
+    }
+    
+    /**
+     * 根据已过分钟数获取当前阶段
+     */
+    public int getCurrentStage(int elapsedMinutes) {
+        if (elapsedMinutes >= stage4StartMinute) return 4;
+        if (elapsedMinutes >= stage3StartMinute) return 3;
+        if (elapsedMinutes >= stage2StartMinute) return 2;
+        return 1;
     }
     
     public double getBaseRewardPerKill() {

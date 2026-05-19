@@ -1,48 +1,48 @@
-name: Gost
-version: 2.2.2
-main: io.Sriptirc_wp_1258.gost.Gost
-api-version: 1.20
-description: 极限生存对抗游戏 - 融合猫抓老鼠、鬼抓人、躲猫猫、CF生化模式等多种玩法
-author: ScriptIrc
-website: https://scriptirc.com
-
-depend: [Vault]
-softdepend: []
-
+name: UpMobs
+version: '1.0.0'
+main: io.Sriptirc_wp_1258.upmobs.Upmobs
+api-version: '1.16'
+authors: ['wp:1258']
+description: '升级原版我的世界中的所有怪物，支持自定义生物和动态属性调节'
+depend: ['Vault']
 commands:
-  gost:
-    description: 玩家命令 - 加入/离开游戏
-    usage: /<command> [join|leave|info|help]
-    aliases: [join, leave]
-  gostadmin:
-    description: 管理员命令 - 管理游戏和区域
-    usage: /<command> [start|stop|pos1|pos2|save|list|load|delete|info|tool|clear|reload|status|dark|heartbeat|economy|help]
-    aliases: [ga]
-  divineguardian:
-    description: 神圣守护管理命令
-    usage: /<command> [status|enable|disable|reload|setcharges|setcooldown|broadcast|info|force|clear]
-    aliases: [dg]
-  ghostparticle:
-    description: 鬼玩家粒子效果管理命令
-    usage: /<command> [status|enable|disable|reload|settype|setcount|setinterval|setmothercolor|setnormalcolor|setsize|setpreparation|test|listtypes]
-    aliases: [gp]
-
+    upmobs:
+        description: '主命令帮助菜单'
+        aliases: ['um']
+    upmobsreload:
+        description: '重载插件配置'
+        aliases: ['umr']
+    upmobsset:
+        description: '设置生物属性'
+        aliases: ['ums']
+    upmobsget:
+        description: '查看生物属性'
+        aliases: ['umg']
+    upmobspreset:
+        description: '管理预设配置'
+        aliases: ['ump']
+    upmobscustom:
+        description: '管理自定义生物'
+        aliases: ['umc']
+    challengetower:
+        description: '挑战塔快捷命令'
+        aliases: ['ct']
 permissions:
-  gost.player:
-    description: 允许玩家使用基本命令
-    default: true
-  gost.join:
-    description: 允许玩家加入游戏
-    default: true
-  gost.leave:
-    description: 允许玩家离开游戏
-    default: true
-  gost.admin:
-    description: 管理员权限
-    default: op
-  gost.admin.divineguardian:
-    description: 允许管理神圣守护
-    default: op
-  gost.admin.ghostparticle:
-    description: 允许管理鬼玩家粒子效果
-    default: op
+    upmobs.use:
+        description: '使用插件基础功能'
+        default: false
+    upmobs.admin:
+        description: '管理员权限'
+        default: false
+    upmobs.set:
+        description: '设置生物属性'
+        default: false
+    upmobs.get:
+        description: '查看生物属性'
+        default: false
+    upmobs.preset:
+        description: '管理预设配置'
+        default: false
+    upmobs.custom:
+        description: '管理自定义生物'
+        default: false

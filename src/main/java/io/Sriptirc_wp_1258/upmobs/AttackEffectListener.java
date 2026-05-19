@@ -1,5 +1,6 @@
 package io.Sriptirc_wp_1258.upmobs;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -112,7 +113,7 @@ public class AttackEffectListener implements Listener {
             
             // 使用红色粒子表示攻击轨迹
             world.spawnParticle(Particle.FLAME, particleLoc, 2, 0.1, 0.1, 0.1, 0);
-            world.spawnParticle(Particle.DUST, particleLoc, 1, 0, 0, 0, 0);
+            world.spawnParticle(Particle.DUST, particleLoc, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.RED, 1.0f));
         }
         
         // 在目标位置播放命中特效

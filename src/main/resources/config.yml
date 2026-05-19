@@ -1,168 +1,461 @@
-# Gost 插件配置文件
-# 版本: 2.2.2
-# Minecraft: 1.20.x
+# 升格怪物Up!Mobs 配置文件 - 吸血进化版 + 自然刷新升格 + 第四阶段怪物 + 经济奖励 + 挑战塔逐层加强 + 通天层 + 通关奖金（无天气系统）
+# ScriptIrc-config-version: 34
 
-ScriptIrc-config-version: 25
+# ============================================================
+# 全局设置 - 控制插件整体行为
+# ============================================================
+upgrade_enabled: true            # 【总开关】true=启用升格/进化，false=完全禁用
+random_individual_upgrade: false  # 【旧功能】随机个体升级（已废弃，建议保持false）
+global_multiplier: 1.5           # 【全局倍率】所有怪物属性在此基础上乘算（1.5=1.5倍）
 
-# 游戏设置
-game:
-  duration: 420 # 游戏时长（秒），默认7分钟
-  preparation-time: 20 # 准备时间（秒）
-  queue-time: 60 # 队列等待时间（秒）
-  min-players: 2 # 最小玩家数
-  max-players: 16 # 最大玩家数
-  max-games: 1 # 最大同时游戏数（0=禁止新游戏）
-  match-queue-time: 30 # 匹配队列时间（秒），队列满员后等待多久开始游戏
+# ============================================================
+# 自然刷新升格 - 野外怪物生成时直接变成升格怪物
+# ============================================================
+natural_upgrade:
+  enabled: true                  # 启用自然刷新升格怪物
+  spawn_chance: 0.09             # 自然刷新升格怪物几率（百分比，0.09%）
+  upgrade_strength: 1.0          # 升格怪物增强幅度（1.0 = 无增强）
+  effects:
+    sound: true                  # 是否播放升格音效
+    particles: true              # 是否显示粒子特效
+    attack_effects: true         # 是否启用攻击特效
+    name_prefix: true            # 是否添加升格名称前缀
 
-# 经济设置
-economy:
-  entry-fee: 100.0 # 入场费
-  server-bonus: 5000.0 # 服务器奖金
-
-# 道具设置
-items:
-  adrenaline:
-    duration: 10 # 肾上腺素持续时间（秒）
-    speed-level: 2 # 肾上腺素速度等级
-  frenzy:
-    duration: 10 # 狂暴持续时间（秒）
-    speed-level: 2 # 狂暴速度等级
-  ice-ball:
-    slow-duration: 4 # 凝冰球减速持续时间（秒）
-    slow-level: 4 # 凝冰球减速等级
-  soul-control:
-    freeze-duration: 6 # 控魂术冻结持续时间（秒）
-    cooldown: 18 # 控魂术冷却时间（秒）
-  teleport-pearl:
-    cooldown: 20 # 传送珍珠冷却时间（秒）
-  stinky-steak:
-    speed-duration: 14 # 臭牛排速度效果持续时间（秒）
-    speed-level: 1 # 臭牛排速度效果等级（1=速度II）
-    glowing-duration: 10 # 臭牛排发光效果持续时间（秒）
-    cooldown: 30 # 臭牛排冷却时间（秒）
-  soul-detector:
-    duration: 25 # 灵魂探测器暴露持续时间（秒）
-    cooldown: 35 # 灵魂探测器冷却时间（秒）
-  second-chance:
-    cooldown: 180 # 一次机会冷却时间（秒）
-    human-speed-duration: 10 # 人类玩家速度效果持续时间（秒）
-    human-speed-level: 2 # 人类玩家速度效果等级
-    human-glowing-duration: 10 # 人类玩家高亮效果持续时间（秒）
-    ghost-slow-duration: 7 # 鬼玩家缓慢效果持续时间（秒）
-    ghost-slow-level: 1 # 鬼玩家缓慢效果等级
-
-# 效果设置
-effects:
-  mother-ghost-blindness-duration: 20 # 母体失明持续时间（秒）
-  ghost-immobilize-duration: 20 # 母体鬼固定时间（秒）
-  ghost-sense-duration: 5 # 幽灵感知高亮持续时间（秒）
-  infection-lightning: true # 感染时是否显示闪电
-  infection-sound: true # 感染时是否播放音效
-  minute-glowing:
-    enabled: true # 是否启用每分钟高亮效果
-    duration: 5 # 高亮持续时间（秒）
-    interval: 60 # 触发间隔时间（秒）
-
-# 鬼转人类功能设置
-ghost-to-human:
-  enabled: false # 是否启用鬼转人类功能
-  remaining-time: 180 # 剩余多少秒时触发（默认3分钟）
-  count: 1 # 转换数量
-
-# 游戏血量设置
-health:
-  max-health: 10.0 # 游戏期间玩家的最大生命值（默认10颗心，即20点生命值）
-  # 推荐添加Injured Effects模组并限制最大生命值为4.0以下，可以添加恐怖氛围
-
-# 黑暗效果设置
-dark-effect:
-  enabled: true # 是否启用黑暗效果（给予所有玩家黑暗视觉效果，不降低移动速度）
-  duration: 999999 # 黑暗效果持续时间（秒），设置为极大值以持续整个游戏
-  amplifier: 0 # 黑暗效果等级（0为默认）
-
-# 心跳声设置
-heartbeat:
-  enabled: true # 是否启用心跳声效果（游戏过程中人类玩家听到监守者心跳声）
-  interval: 10 # 心跳声播放间隔（秒）
-
-# 区域选择设置
-area:
-  selection-tool: MAGMA_CREAM # 选区工具物品（默认为岩浆膏）
-  max-areas: 20 # 最大存档区域数量
-  auto-teleport: true # 是否自动传送到区域
-  ignore-y-axis: false # 是否忽略Y轴检查（设为true时，区域检查只考虑X和Z坐标）
-
-# 道具刷新设置
-item-spawn:
-  enabled: true              # 是否启用道具刷新
-  interval: 60               # 刷新间隔（秒）
-  max-per-refresh: 3         # 每次刷新数量上限
-  max-per-player: 1          # 每位玩家最多获得数量
-
-# 语言设置
-language:
-  default: zh_CN             # 默认语言: zh_CN (中文), en_US (英文)
-  auto-detect: true          # 是否自动检测玩家语言（基于客户端语言）
-  max-item-types-per-player: 6 # 玩家最多拥有的道具种类数量
-
-# 神圣守护设置
-# 神圣守护系统设置（v2.2.2重构）
-divine-guardian:
-  enabled: true              # 是否启用神圣守护系统
-  trigger-human-count: 2     # 触发神圣守护的人类玩家数量（最后N位人类）
-  broadcast: true            # 是否广播神圣守护触发消息
+# ============================================================
+# 吸血进化 - 怪物攻击玩家积累能量，满足条件后进化到下一阶段
+# ============================================================
+evolution:
+  enabled: true                  # 是否启用吸血进化
+  required_attacks: 5            # 进化所需攻击次数（增加到5次）
+  required_damage: 25.0          # 进化所需总伤害（增加到25点）
+  health_threshold: 50.0         # 血量阈值百分比（低于50%才进化）
+  cooldown: 45000                # 进化冷却时间（毫秒，45秒）
+  max_stages: 4                  # 最大进化阶段
+  duration: 60                   # 进化持续时间（tick，3秒）
   
-  # 神圣守护效果设置
-  holy-guardian:
-    teleport-attacker: true  # 随机传送尝试感染的鬼
-    teleport-radius: 10.0    # 随机传送半径（方块）
-    effect-duration: 30      # 神圣守护效果持续时间（秒），0表示永久直到猎魔人阶段
-    defense-charges: 3       # 神圣守护可抵挡的攻击次数
-    
-  # 猎魔人阶段设置
-  demon-hunter:
-    phase-start-time: 90     # 猎魔人阶段开始时间（游戏剩余秒数）
-    max-uses: 2              # 神之救赎道具最大使用次数（保持不变）
-    holy-redemption-cooldown: 10 # 神之救赎冷却时间（秒）
-    
-    # 收割者道具设置
-    reaper-weapon:
-      damage-per-hit: 1      # 每次攻击伤害
-      hits-to-kill: 2        # 击杀所需攻击次数
-      attack-cooldown: 2.0   # 攻击冷却时间（秒）
-      enchant-glow: true     # 是否显示附魔光效
-    
-    # 击杀奖励设置
-    kill-rewards:
-      demon-hunter-kill-reward: 0.3  # 猎魔人击杀鬼获得的奖金比例（从人类奖池分配）
-      mother-kill-demon-hunter-reward: 0.5  # 母体击杀猎魔人获得的奖金比例（高于感染奖励）
-    
-    # 复活机制设置
-    respawn:
-      enabled: true          # 是否启用鬼玩家复活机制
-      respawn-time: 15       # 复活时间（秒）
-    
-    # 血量设置（猎魔人阶段）
-    health:
-      ghost-normal: 2.0      # 普通鬼血量（猎魔人阶段）
-      ghost-mother: 3.0      # 母体鬼血量（猎魔人阶段）
-      demon-hunter: 2.0      # 猎魔人血量（猎魔人阶段）
-      mother-attack-damage: 1.0  # 母体攻击猎魔人造成的伤害
-      no-healing: true       # 猎魔人阶段禁止回血
-    
-    # 母体新增设置
-    additional-mother:
-      enabled: true          # 是否在猎魔人阶段新增母体
-      player-threshold: 8    # 触发新增母体的玩家总数阈值
-      only-in-demon-hunter-phase: true  # 是否只在猎魔人阶段新增
+  # 进化提示消息
+  start_message: "§c§l{怪物} §f吸食了你的血液，开始进化！"
+  complete_message: "§6§l{怪物} §e已完成第{阶段}阶段进化！"
+  
+  # 进化效果
+  particles: true                # 是否显示粒子效果
+  sounds: true                   # 是否播放音效
+  screen_shake: true             # 是否屏幕震动
+  glowing: true                  # 是否发光效果
+  
+  # 进化怪物装备
+  stage_equipment: true          # 是否给高阶段怪物添加随机护甲和武器（第二阶段起）
 
-# 鬼玩家粒子效果设置
-ghost-particle:
-  enabled: true              # 是否启用鬼玩家粒子效果
-  type: REDSTONE             # 粒子类型：REDSTONE, FLAME, SOUL_FIRE_FLAME, DRAGON_BREATH, PORTAL, DUST_COLOR_TRANSITION, SPELL_MOB, SPELL_WITCH, ENCHANTMENT_TABLE, CRIT_MAGIC, FIREWORKS_SPARK, HEART, NOTE, VILLAGER_ANGRY, VILLAGER_HAPPY, TOTEM_OF_UNDYING, COMPOSTER, SQUID_INK, DRIPPING_OBSIDIAN_TEAR, FALLING_OBSIDIAN_TEAR, LANDING_OBSIDIAN_TEAR
-  count: 5                   # 每次生成粒子数量
-  interval: 15               # 粒子生成间隔（刻，20刻=1秒）
-  mother-color: "255,0,0"    # 母体鬼粒子颜色（RGB格式：红,绿,蓝）
-  normal-color: "0,255,0"    # 普通鬼粒子颜色（RGB格式：红,绿,蓝）
-  size: 1.0                  # 粒子大小
-  show-in-preparation: true  # 准备阶段是否显示粒子
+# ============================================================
+# 原版生物属性 - 每种怪物的基础属性配置
+# ============================================================
+# 格式说明：
+#   health: 血量 (支持: 固定值100, 区间50-150, 百分比200%)
+#   speed: 速度 (基础值0.2)
+#   armor: 护甲
+#   damage: 伤害
+#   knockback_resistance: 击退抗性 (0-1)
+#   follow_range: 跟随范围
+#   attack_speed: 攻击速度
+#   fire_resistant: 火焰抗性
+#   invisible: 隐身
+#   glowing: 发光
+#   silent: 静音
+#   spawn_weight: 生成权重 (0-1, 用于随机个体升级)
+
+mobs:
+  # 僵尸类
+  zombie:
+    type: ZOMBIE
+    health: 200%      # 2倍血量（平衡调整）
+    speed: 110%       # 1.1倍速度（略微提升）
+    armor: 150%       # 1.5倍护甲
+    damage: 200%      # 2倍伤害
+    knockback_resistance: 20%  # 降低击退抗性
+    follow_range: 150%
+    attack_speed: 120%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 1.0
+  
+  skeleton:
+    type: SKELETON
+    health: 180%      # 1.8倍血量
+    speed: 105%       # 1.05倍速度
+    armor: 120%       # 1.2倍护甲
+    damage: 180%      # 1.8倍伤害
+    knockback_resistance: 10%  # 骷髅应该容易被击退
+    follow_range: 200%
+    attack_speed: 150%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 1.0
+  
+  creeper:
+    type: CREEPER
+    health: 200%
+    speed: 100%       # 保持原版速度
+    armor: 100%
+    damage: 100%      # 取消爆炸伤害增强，保持原版伤害
+    knockback_resistance: 0%    # 取消击退抗性
+    follow_range: 100%          # 保持原版跟随范围
+    attack_speed: 100%
+    fire_resistant: false
+    invisible: false
+    glowing: true     # 发光以便识别
+    silent: false
+    spawn_weight: 0.8  # 80%生成几率
+  
+  spider:
+    type: SPIDER
+    health: 400%
+    speed: 200%
+    armor: 250%
+    damage: 300%
+    knockback_resistance: 40%
+    follow_range: 180%
+    attack_speed: 200%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 1.0
+  
+  enderman:
+    type: ENDERMAN
+    health: 600%
+    speed: 180%
+    armor: 400%
+    damage: 500%
+    knockback_resistance: 70%
+    follow_range: 300%
+    attack_speed: 160%
+    fire_resistant: false
+    invisible: false
+    glowing: false
+    silent: false
+    spawn_weight: 0.7
+  
+  # BOSS生物
+  wither:
+    type: WITHER
+    health: 800%
+    speed: 150%
+    armor: 600%
+    damage: 700%
+    knockback_resistance: 90%
+    follow_range: 400%
+    attack_speed: 200%
+    fire_resistant: true
+    invisible: false
+    glowing: true
+    silent: false
+    spawn_weight: 1.0
+  
+  ender_dragon:
+    type: ENDER_DRAGON
+    health: 1000%
+    speed: 180%
+    armor: 800%
+    damage: 800%
+    knockback_resistance: 95%
+    follow_range: 500%
+    attack_speed: 180%
+    fire_resistant: true
+    invisible: false
+    glowing: true
+    silent: false
+    spawn_weight: 1.0
+  
+  # 特殊生物
+  illusioner:
+    type: ILLUSIONER
+    health: 400%
+    speed: 130%
+    armor: 300%
+    damage: 350%
+    knockback_resistance: 60%
+    follow_range: 250%
+    attack_speed: 170%
+    fire_resistant: false
+    invisible: true    # 幻术师默认隐身
+    glowing: false
+    silent: false
+    spawn_weight: 0.5  # 幻术师稀有
+  
+  # 更多生物配置会在插件首次运行时自动生成...
+
+# ============================================================
+# 自定义生物 - 通过指令添加的特殊生物
+# ============================================================
+# 使用 /upmobs custom add <名称> 添加
+custom_mobs:
+  # 示例：精英僵尸
+  elite_zombie:
+    type: CUSTOM
+    name: elite_zombie
+    health: 1000%
+    speed: 200%
+    armor: 500%
+    damage: 600%
+    knockback_resistance: 80%
+    follow_range: 300%
+    attack_speed: 250%
+    fire_resistant: true
+    invisible: false
+    glowing: true
+    silent: false
+    spawn_weight: 0.3
+
+# ============================================================
+# 预设配置 - 保存/加载不同的难度配置方案
+# ============================================================
+# 使用 /upmobs preset save <名称> 保存当前配置
+# 使用 /upmobs preset load <名称> 加载预设配置
+presets:
+  easy_mode:
+    mobs:
+      zombie:
+        type: ZOMBIE
+        health: 150%
+        speed: 110%
+        armor: 120%
+        damage: 130%
+        knockback_resistance: 20%
+        follow_range: 120%
+        attack_speed: 110%
+        fire_resistant: false
+        invisible: false
+        glowing: false
+        silent: false
+        spawn_weight: 1.0
+  
+  nightmare_mode:
+    mobs:
+      zombie:
+        type: ZOMBIE
+        health: 1000%
+        speed: 300%
+        armor: 800%
+        damage: 900%
+        knockback_resistance: 90%
+        follow_range: 400%
+        attack_speed: 300%
+        fire_resistant: true
+        invisible: false
+        glowing: true
+        silent: false
+        spawn_weight: 1.0
+
+# ============================================================
+# 第四阶段怪物 - 终极进化形态的属性配置
+# ============================================================
+stage4:
+  spawn_chance: 1.0                  # 第四阶段怪物自然刷新几率（百分比，1%）
+  
+  # 属性增强倍率（相对于第三阶段）
+  health_multiplier: 4.0             # 血量倍率（4倍）
+  damage_multiplier: 3.0             # 伤害倍率（3倍）
+  speed_multiplier: 1.5              # 速度倍率（1.5倍）
+  armor_multiplier: 2.0              # 护甲倍率（2倍）
+  knockback_resistance: 0.8          # 击退抗性（80%）
+  attack_speed_multiplier: 1.5       # 攻击速度倍率（1.5倍）
+  
+  # 特效设置
+  effects:
+    glowing: true                    # 永久发光效果
+    strength: true                   # 力量效果（等级1）
+    resistance: true                 # 抗性提升效果（等级1）
+    speed: true                      # 速度效果（等级1）
+    regeneration: true               # 再生效果（等级0）
+    
+  # 粒子效果
+  particles:
+    type: DRAGON_BREATH              # 粒子类型
+    count: 20                        # 粒子数量
+    spread: 3.0                      # 粒子扩散范围
+    
+  # 音效
+  sound:
+    spawn: ENTITY_WITHER_SPAWN       # 生成音效
+    volume: 1.0                      # 音量
+    pitch: 0.8                       # 音调
+
+# ============================================================
+# 经济奖励 - 击杀升格/进化怪物获得游戏币（需Vault插件）
+# ============================================================
+economy_rewards:
+  enabled: true                      # 是否启用经济奖励
+  
+  # 基础奖励设置
+  base_amount: 10.0                  # 第一阶段基础奖励
+  stage_multiplier: 2.0              # 每阶段奖励倍率（第二阶段=20，第三阶段=40，第四阶段=80）
+  min_amount: 5.0                    # 最小奖励金额
+  
+  # 特殊怪物奖励
+  stage4_bonus: 50.0                 # 第四阶段怪物额外奖励
+  upgraded_amount: 15.0              # 升格怪物基础奖励
+  reward_chance: 0.3                 # 击杀升格怪物获得奖金的几率（0.3 = 30%）
+  
+  # 奖励消息
+  message_enabled: true              # 是否显示奖励消息
+  message_format: "§a§l+ §f{amount} 游戏币 §7({reason})"  # 奖励消息格式
+  
+  # 奖励限制
+  max_reward_per_kill: 200.0         # 单次击杀最大奖励
+  require_permission: false          # 是否需要权限才能获得奖励
+  permission_node: "upmobs.rewards"  # 奖励权限节点
+
+# ============================================================
+# 挑战塔 - 18层逐层加强的挑战模式
+# ============================================================
+challenge_tower:
+  # 基础配置
+  max_players: 4                     # 最大玩家数
+  max_levels: 18                     # 最大层数
+  waves_per_level: 3                 # 每层波次数
+  base_monster_count: 10             # 基础怪物数量
+  increment_per_level: 6             # 每层增加怪物数量
+  monster_per_player: 3              # 每多1人增加的怪物数量
+  
+  cooldown_seconds: 300              # 冷却时间（秒）
+  
+  # 队列倒计时配置
+  queue_countdown: 30                # 队列倒计时秒数（单人可开启）
+  min_players_to_start: 1            # 开始挑战所需最少玩家数
+  enable_countdown: true             # 是否启用倒计时
+  
+  # 奖励配置
+  base_experience: 100               # 基础经验奖励
+  experience_multiplier: 1.5         # 每层经验倍率
+  
+  # 通关奖金配置（首次通关每层时发放）
+  completion_rewards:
+    enabled: true                    # 启用通关奖金
+    base_reward: 8000.0              # 基础层奖金（1-5层）
+    advanced_reward: 9000.0          # 进阶层奖金（6-10层）
+    elite_reward: 10000.0            # 精英层奖金（11-15层）
+    master_reward: 11000.0           # 大师层奖金（16-18层）
+  
+  # 区域保护
+  teleport_delay_ticks: 50           # 传送延迟
+  enable_warning: true               # 启用警告
+  prevent_natural_spawn: true        # 阻止自然生成
+  
+  # 怪物类型
+  monster_types:
+    - ZOMBIE
+    - SKELETON
+    - CREEPER
+    - SPIDER
+    - ENDERMAN
+    - WITCH
+    - BLAZE
+    - PIGLIN
+    - HUSK
+    - STRAY
+  
+  # ========== 逐层加强配置 ==========
+  level_scaling:
+    # 基础属性增强
+    base_health_multiplier: 1.0      # 基础血量倍率
+    health_multiplier_per_level: 0.5 # 每层血量倍率增加
+    max_health_multiplier: 10.0      # 最大血量倍率
+    
+    base_damage_multiplier: 1.0      # 基础伤害倍率
+    damage_multiplier_per_level: 0.4 # 每层伤害倍率增加
+    max_damage_multiplier: 8.0       # 最大伤害倍率
+    
+    base_speed_multiplier: 1.0       # 基础速度倍率
+    speed_multiplier_per_level: 0.1  # 每层速度倍率增加
+    max_speed_multiplier: 3.0        # 最大速度倍率
+    
+    base_armor_multiplier: 1.0       # 基础护甲倍率
+    armor_multiplier_per_level: 0.2  # 每层护甲倍率增加
+    max_armor_multiplier: 5.0        # 最大护甲倍率
+    
+    # 特殊效果配置
+    min_level_for_effects: 5         # 开始出现特殊效果的最小层数
+    effect_chance_per_level: 0.03    # 每层特殊效果几率增加
+    max_effect_chance: 0.5           # 最大特殊效果几率
+    
+    # 进化系统配置
+    min_level_for_evolution: 6       # 开始出现进化怪物的最小层数（进阶层）
+    evolution_chance_per_level: 0.017 # 每层进化几率增加（达到30%）
+    max_evolution_chance: 0.3        # 最大进化几率
+    
+    # 第四阶段怪物配置
+    min_level_for_stage4: 11         # 开始出现第四阶段怪物的最小层数（精英层）
+    stage4_chance_per_level: 0.008   # 每层第四阶段怪物几率增加（达到15%）
+    max_stage4_chance: 0.15          # 最大第四阶段怪物几率
+    
+    # 升格怪物配置
+    upgraded_chance_per_level: 0.05  # 每层升格怪物几率增加
+    max_upgraded_chance: 0.8         # 最大升格怪物几率
+    
+    # 特殊效果类型
+    special_effects:
+      - FIRE_RESISTANCE              # 火焰抗性
+      - KNOCKBACK_RESISTANCE         # 击退抗性
+      - REGENERATION                 # 生命恢复
+      - STRENGTH                     # 力量效果
+
+# ============================================================
+# 通天层 - 通关挑战塔18层后解锁的无尽挑战模式
+# ============================================================
+sky_tower:
+  enabled: true                      # 是否启用通天层
+  unlock_requirement: complete_tower # 解锁要求：complete_tower=通关挑战塔
+  
+  # 怪物配置
+  monster:
+    base_count: 10                   # 基础怪物数量
+    refresh_on_death: true           # 死亡后刷新怪物
+    refresh_delay_seconds: 5         # 刷新延迟（秒）
+    types:                           # 怪物类型（第四阶段怪物）
+      - STAGE4_ZOMBIE
+      - STAGE4_SKELETON
+      - STAGE4_CREEPER
+      - STAGE4_SPIDER
+      - STAGE4_ENDERMAN
+  
+  # 时间限制
+  time_limit:
+    minutes: 10                      # 时间限制（分钟）
+    show_timer: true                 # 显示倒计时
+    warning_seconds: 60              # 警告时间（秒）
+  
+  # 难度配置
+  difficulty:
+    increase_per_minute: 0.1         # 每分钟难度增加
+    max_multiplier: 3.0              # 最大难度倍率
+  
+  # 波次递进配置（每击杀10只怪物进入下一波）
+  # 底层简单，高层高难度
+  waves:
+    wave1_to_3: "普通升格怪物"        # 波次1~3：原版属性，有进化资格
+    wave4_to_6: "进化怪物"            # 波次4~6：第一阶段进化属性
+    wave7_to_9: "高阶段进化怪物"      # 波次7~9：第二~三阶段进化属性
+    wave10_plus: "第四阶段怪物"       # 波次10+：第四阶段最强怪物
+  
+  # 奖励配置
+  rewards:
+    base_per_kill: 50.0              # 基础击杀奖励
+    multiplier_per_minute: 1.2       # 每分钟奖励倍率
+    milestone_interval_minutes: 5    # 里程碑间隔（分钟）
+    milestone_bonus: 100.0           # 里程碑额外奖励
+  
+  # 排行榜配置
+  leaderboard:
+    enabled: true                    # 启用排行榜
+    size: 10                         # 排行榜大小
+    save_stats: true                 # 保存玩家统计
+  
+  # 特殊效果
+  effects:
+    player_status_display: true      # 启用玩家状态显示
+    status_update_seconds: 10        # 状态更新间隔

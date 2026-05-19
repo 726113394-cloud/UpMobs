@@ -38,6 +38,8 @@ public class SkyTowerInstance {
     private int currentMonsterCount = 0;
     private int totalMonstersKilled = 0;
     private int milestoneReached = 0;
+    private int currentWave = 1;            // 当前波次（从1开始，越高越难）
+    private int killsInCurrentWave = 0;     // 当前波次已击杀数
     
     // 怪物管理
     private final List<UUID> spawnedMonsters = new ArrayList<>();
@@ -164,6 +166,27 @@ public class SkyTowerInstance {
         Random random = new Random();
         ChallengeTowerArea area = tower.getArea();
         
+        // 根据波次决定怪物阶段（波次越高怪物越强）
+        // 波次1~3：普通升格怪物
+        // 波次4~6：进化怪物（第一阶段）
+        // 波次7~9：高阶段进化怪物（第二~三阶段）
+        // 波次10+：混合出怪，第四阶段占20%，其余为高阶段进化怪物
+        int monsterStage;
+        if (currentWave <= 3) {
+            monsterStage = 0; // 普通升格
+        } else if (currentWave <= 6) {
+            monsterStage = 1; // 第一阶段进化
+        } else if (currentWave <= 9) {
+            monsterStage = 2 + random.nextInt(2); // 第二或第三阶段
+        } else {
+            // 波次10+：20%概率出第四阶段，80%出高阶段进化
+            if (random.nextDouble() < 0.2) {
+                monsterStage = 4; // 第四阶段（低概率）
+            } else {
+                monsterStage = 2 + random.nextInt(2); // 第二或第三阶段
+            }
+        }
+        
         for (int i = 0; i < count; i++) {
             // 获取随机位置（在区域内部的地面上）
             Location spawnLocation = area.getRandomGroundLocation();
@@ -172,17 +195,35 @@ public class SkyTowerInstance {
             List<String> monsterTypeNames = config.getMonsterTypes();
             String monsterTypeName = monsterTypeNames.get(random.nextInt(monsterTypeNames.size()));
             
-            // 根据怪物类型名称生成对应的第四阶段怪物
-            LivingEntity monster = createStage4Monster(spawnLocation, monsterTypeName);
-            if (monster == null) continue;
+            LivingEntity monster;
             
-            // 应用通天层增强效果（随时间增强）
-            applySkyTowerEnhancements(monster);
+            // 根据怪物阶段生成不同强度的怪物
+            if (monsterStage == 0) {
+                // 普通升格怪物（原版属性，有进化资格）
+                monster = createNormalMonster(spawnLocation, monsterTypeName);
+                if (monster != null) {
+                    monster.addScoreboardTag("upgraded_mob");
+                    applySkyTowerEnhancements(monster);
+                }
+            } else if (monsterStage == 4) {
+                // 第四阶段怪物（最强）
+                monster = createStage4Monster(spawnLocation, monsterTypeName);
+                if (monster != null) {
+                    applySkyTowerEnhancements(monster);
+                }
+            } else {
+                // 进化怪物（指定阶段）
+                monster = createStageMonster(spawnLocation, monsterTypeName, monsterStage);
+                if (monster != null) {
+                    applySkyTowerEnhancements(monster);
+                }
+            }
+            
+            if (monster == null) continue;
             
             // 添加通天层标签
             monster.addScoreboardTag("sky_tower_monster");
-            monster.addScoreboardTag("stage4");
-            monster.addScoreboardTag("upgraded");
+            monster.addScoreboardTag("wave_" + currentWave);
             
             // 设置目标为玩家
             Player player = Bukkit.getPlayer(playerId);
@@ -194,10 +235,56 @@ public class SkyTowerInstance {
             spawnedMonsters.add(monster.getUniqueId());
             monsterTypes.put(monster.getUniqueId(), monsterTypeName);
             
-            // 播放生成效果
-            spawnLocation.getWorld().spawnParticle(Particle.DRAGON_BREATH, spawnLocation, 20, 0.5, 0.5, 0.5, 0);
-            spawnLocation.getWorld().playSound(spawnLocation, Sound.ENTITY_WITHER_SPAWN, 0.8f, 0.8f);
+            // 播放生成效果（根据阶段不同）
+            if (monsterStage >= 4) {
+                spawnLocation.getWorld().spawnParticle(Particle.DRAGON_BREATH, spawnLocation, 20, 0.5, 0.5, 0.5, 0);
+                spawnLocation.getWorld().playSound(spawnLocation, Sound.ENTITY_WITHER_SPAWN, 0.8f, 0.8f);
+            } else {
+                spawnLocation.getWorld().spawnParticle(Particle.SMOKE, spawnLocation, 10, 0.5, 0.5, 0.5, 0);
+                spawnLocation.getWorld().playSound(spawnLocation, Sound.ENTITY_ZOMBIE_AMBIENT, 0.5f, 1.0f);
+            }
         }
+    }
+    
+    /**
+     * 创建普通怪物（原版属性）
+     */
+    private LivingEntity createNormalMonster(Location location, String monsterTypeName) {
+        String baseTypeName = monsterTypeName.replace("STAGE4_", "");
+        EntityType entityType;
+        try {
+            entityType = EntityType.valueOf(baseTypeName);
+        } catch (Exception e) {
+            return null;
+        }
+        
+        return (LivingEntity) location.getWorld().spawnEntity(location, entityType);
+    }
+    
+    /**
+     * 创建指定阶段的进化怪物
+     */
+    private LivingEntity createStageMonster(Location location, String monsterTypeName, int stage) {
+        String baseTypeName = monsterTypeName.replace("STAGE4_", "");
+        EntityType entityType;
+        try {
+            entityType = EntityType.valueOf(baseTypeName);
+        } catch (Exception e) {
+            return null;
+        }
+        
+        LivingEntity monster = (LivingEntity) location.getWorld().spawnEntity(location, entityType);
+        if (monster == null) return null;
+        
+        // 标记为升格怪物
+        monster.addScoreboardTag("upgraded_mob");
+        
+        // 应用进化效果
+        if (plugin.getEvolutionEffects() != null) {
+            plugin.getEvolutionEffects().applyEvolutionEffects(monster, stage);
+        }
+        
+        return monster;
     }
     
     /**
@@ -421,6 +508,14 @@ public class SkyTowerInstance {
                 monsterTypes.remove(monsterId);
                 currentMonsterCount--;
                 totalMonstersKilled++;
+                killsInCurrentWave++;
+                
+                // 每击杀10只怪物进入下一波
+                if (killsInCurrentWave >= 10) {
+                    currentWave++;
+                    killsInCurrentWave = 0;
+                    broadcastMessage(ChatColor.GOLD + "§l⚔ 进入第 " + currentWave + " 波！怪物强度提升！");
+                }
                 
                 // 奖励击杀
                 awardKillReward();
